@@ -16,9 +16,6 @@ app_description = "Process Quality Control for CMS outer tracker"
 app_copyright = "Copyright © 2019-2024 HEPHY"
 app_organization = "HEPHY"
 
-# Entry point for the application
-launcher_code = "from pqc.__main__ import main; main()"
-
 # Data files to be included in the output executable
 datas = [
     (os.path.join(app_root, "assets", "icons", "*.svg"), "pqc/assets/icons"),
