@@ -12,11 +12,14 @@
 AppId={#Organization}_{#Name}_{#Version}
 AppName={#Name}
 AppVersion={#Version}
+AppPublisher=HEPHY Detector Development
+AppPublisherURL=https://github.com/hephy-dd/
 DefaultDirName={userappdata}\{#Organization}\pqc\{#Version}
 DefaultGroupName={#Name}
 OutputDir=dist
 OutputBaseFilename=pqc-{#Version}-win-x64-setup
 SetupIconFile=pqc\assets\icons\pqc.ico
+UninstallDisplayIcon={app}\{#ExeName}
 Compression=lzma
 SolidCompression=yes
 PrivilegesRequired=lowest
