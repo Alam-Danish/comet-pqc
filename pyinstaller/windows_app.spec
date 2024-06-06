@@ -8,7 +8,8 @@ import pqc
 # Application configurations
 app_root = os.path.abspath(os.path.dirname(pqc.__file__))
 app_version = pqc.__version__
-app_filename = f"pqc-{app_version}.exe"
+app_bundle = "pqc"
+app_filename = f"pqc.exe"
 app_icon = os.path.join(app_root, "assets", "icons", "pqc.ico")
 app_title = "PQC"
 app_description = "Process Quality Control for CMS outer tracker"
@@ -30,6 +31,7 @@ datas = [
 
 # Console will be displayed when the application is run
 console = False
+debug = False
 
 version_info = os.path.join(os.getcwd(), "version_info.txt")
 
@@ -76,13 +78,11 @@ pyz = PYZ(
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
     [],
+    exclude_binaries=True,
     name=app_filename,
     version=version_info,
-    debug=False,
+    debug=debug,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
@@ -90,4 +90,15 @@ exe = EXE(
     runtime_tmpdir=None,
     console=console,
     icon=app_icon,
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name=app_bundle,
 )
