@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.47.0] - 2023-10-18
+## [0.47.0] - 2025-01-08
 ### Changed
 - Refactored code to pass mypy all tests (#212).
+- Switched to pyproject.toml config.
+- Switched to ruff linter.
+- Dropped support for Python 3.8.
+- Added support for Python 3.12 and 3.13.
 
 ### Fixed
 - Reset sequence state for group items correctly.

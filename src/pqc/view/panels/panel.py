@@ -1,7 +1,6 @@
 from typing import Callable, Dict, Optional
 
 from PyQt5 import QtCore, QtWidgets
-from QCharted import ChartView
 
 import comet
 
