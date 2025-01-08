@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for Python 3.12 and 3.13.
 
 ### Fixed
-- Reset sequence state for group items correctly.
+- Reset sequence state for group items correctly (#219).
 
 ## [0.46.2] - 2024-02-26
 ### Fixed

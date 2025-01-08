@@ -11,6 +11,10 @@ nav_order: 10
 
 ### Changed
 - Refactored code to pass mypy all tests.
+- Switched to pyproject.toml config.
+- Switched to ruff linter.
+- Dropped support for Python 3.8.
+- Added support for Python 3.12 and 3.13.
 
 ### Fixed
 - Reset sequence state for group items correctly.
