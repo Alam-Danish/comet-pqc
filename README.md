@@ -16,7 +16,7 @@ This application provides PQC sensor measurements.
 |Keysight E4980A LCR Meter (E4980AL Single channel@FSU)            |LCR Meter |
 |Keithley 6517B Electrometer           |ELM |
 |Keithley 2410 Source Meter            |HV Source, V Source |
-|Keithley 2470 Source Meter (optional) |HV Source, V Source |
+|Keithley 2470 Source Meter  |HV Source, V Source |
 |Keithley 2657A Source Meter (Not used at FSU)          |V Source, HV Source |
 |Corvus TT positioning controller (Not used at FSU)     |Table |
 |HEPHY Environment Box (Optional)                |Environment |
@@ -30,7 +30,7 @@ This application provides PQC sensor measurements.
 Install using pip in a virtual environment.
 
 ```bash
-pip install git+https://github.com/Alam-Danish/comet-pqc.git@<version>
+pip install git+https://github.com/Alam-Danish/comet-pqc.git@0.46.2
 ```
 
 ## Run
