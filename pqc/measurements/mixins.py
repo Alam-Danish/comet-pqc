@@ -510,8 +510,8 @@ class LCRMixin(Mixin):
         self.lcr_safe_write(lcr, ":INIT:CONT OFF")
         self.lcr_safe_write(lcr, ":TRIG:SOUR BUS")
         method = {"single": "SING", "multi": "MULT"}[lcr_open_correction_mode]
-        self.lcr_safe_write(lcr, f":CORR:METH {method}")
-        self.lcr_safe_write(lcr, f":CORR:USE:CHAN {lcr_open_correction_channel:d}")
+        self.lcr_safe_write(lcr, ":CORR:METH SING")
+        #self.lcr_safe_write(lcr, f":CORR:USE:CHAN {lcr_open_correction_channel:d}")
 
     def lcr_acquire_reading(self, lcr):
         """Return primary and secondary LCR reading."""
