@@ -56,7 +56,8 @@ a = Analysis(
         "PyQt5.sip",
         "usb",
         "serial",
-        "gpib_ctypes",
+        "gpib_ctypes"
+        "gpib",
     ],
     hookspath=[],
     runtime_hooks=[],

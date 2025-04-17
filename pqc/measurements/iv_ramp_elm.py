@@ -56,7 +56,7 @@ class IVRampElmMeasurement(MatrixMeasurement, HVSourceMixin, ElectrometerMixin, 
         self.register_parameter("elm_filter_count", 10, type=int)
         self.register_parameter("elm_filter_type", "repeat")
         self.register_parameter("elm_zero_correction", False, type=bool)
-        self.register_parameter("elm_integration_rate", 50, type=int)
+        self.register_parameter("elm_integration_rate", 60, type=int)
         self.register_parameter("elm_current_range", comet.ureg("20 pA"), unit="A")
         self.register_parameter("elm_current_autorange_enable", False, type=bool)
         self.register_parameter("elm_current_autorange_minimum", comet.ureg("20 pA"), unit="A")
@@ -186,7 +186,7 @@ class IVRampElmMeasurement(MatrixMeasurement, HVSourceMixin, ElectrometerMixin, 
         assert self.elm_get_zero_check(elm) is True, "failed to enable zero check"
 
         self.elm_safe_write(elm, ":SENS:FUNC 'CURR'") # note the quotes!
-        assert elm.resource.query(":SENS:FUNC?") == '"CURR:DC"', "failed to set sense function to current"
+        assert elm.resource.query(":SENS:FUNC?") == '"CURR:DC"\n', "failed to set sense function to current"
 
         self.elm_safe_write(elm, f":SENS:CURR:RANG {elm_current_range:E}")
         if elm_zero_correction:

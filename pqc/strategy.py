@@ -141,7 +141,7 @@ class SequenceStrategy:
                                 self.context.set_item_state(sample_item, sample_item.ErrorState)
                                 sample_name = contact_item.sample.name()
                                 contact_name = contact_item.name()
-                                raise RuntimeError(f"No contact position assigned for {sample_name} -> {contact_name}")
+                            #    raise RuntimeError(f"No contact position assigned for {sample_name} -> {contact_name}")
         for sample_item in sequence_item.children():
             if self.context.stop_requested:
                 break
@@ -215,7 +215,7 @@ class SampleStrategy:
                     self.context.set_item_state(sample_item, sample_item.ErrorState)
                     sample_name = contact_item.sample.name()
                     contact_name = contact_item.name()
-                    raise RuntimeError(f"No contact position assigned for {sample_name} -> {contact_name}")
+                #    raise RuntimeError(f"No contact position assigned for {sample_name} -> {contact_name}")
         results = []
         for contact_item in sample_item.children():
             if self.context.stop_requested:

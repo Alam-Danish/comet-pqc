@@ -40,7 +40,7 @@ class IVRampBiasElmMeasurement(MatrixMeasurement, HVSourceMixin, VSourceMixin, E
         self.register_parameter("waiting_time_before", comet.ureg("100 ms"), unit="s")
         self.register_parameter("voltage_step_after", comet.ureg("0 V"), unit="V")
         self.register_parameter("waiting_time_after", comet.ureg("100 ms"), unit="s")
-        self.register_parameter("waiting_time_start", comet.ureg("0 s"), unit="s")
+        self.register_parameter("waiting_time_start", comet.ureg("5 s"), unit="s")
         self.register_parameter("waiting_time_end", comet.ureg("0 s"), unit="s")
         self.register_parameter("bias_voltage", unit="V", required=True)
         self.register_parameter("bias_mode", "constant", values=("constant", "offset"))
@@ -52,7 +52,7 @@ class IVRampBiasElmMeasurement(MatrixMeasurement, HVSourceMixin, VSourceMixin, E
         self.register_parameter("elm_filter_count", 10, type=int)
         self.register_parameter("elm_filter_type", "repeat")
         self.register_parameter("elm_zero_correction", False, type=bool)
-        self.register_parameter("elm_integration_rate", 50, type=int)
+        self.register_parameter("elm_integration_rate", 60, type=int)
         self.register_parameter("elm_current_range", comet.ureg("20 pA"), unit="A")
         self.register_parameter("elm_current_autorange_enable", False, type=bool)
         self.register_parameter("elm_current_autorange_minimum", comet.ureg("20 pA"), unit="A")
@@ -204,7 +204,8 @@ class IVRampBiasElmMeasurement(MatrixMeasurement, HVSourceMixin, VSourceMixin, E
         assert self.elm_get_zero_check(elm) is True, "failed to enable zero check"
 
         self.elm_safe_write(elm, ":SENS:FUNC 'CURR'") # note the quotes!
-        assert elm.resource.query(":SENS:FUNC?") == '"CURR:DC"', "failed to set sense function to current"
+        print("ELM set to current successfully")
+        assert elm.resource.query(":SENS:FUNC?") == '"CURR:DC"\n', "failed to set sense function to current"
 
         self.elm_safe_write(elm, f":SENS:CURR:RANG {elm_current_range:E}")
         if elm_zero_correction:
@@ -233,33 +234,33 @@ class IVRampBiasElmMeasurement(MatrixMeasurement, HVSourceMixin, VSourceMixin, E
         })
 
         # Ramp HV Spource to bias voltage
-        voltage = self.vsrc_get_voltage_level(vsrc)
-
-        logger.info("V Source ramp to bias voltage: from %E V to %E V with step %E V", voltage, bias_voltage, voltage_step_before)
-        for voltage in LinearRange(voltage, bias_voltage, voltage_step_before):
-            self.process.set_message("Ramp to bias... {}".format(format_metric(voltage, "V")))
-            self.vsrc_set_voltage_level(vsrc, voltage)
-            self.process.update_state({"vsrc_voltage": voltage})
-            time.sleep(waiting_time_before)
-
-            # Compliance tripped?
-            self.vsrc_check_compliance(vsrc)
-
-            if self.process.stop_requested:
-                break
-
-        # Ramp HV Source to start voltage
         voltage = self.hvsrc_get_voltage_level(hvsrc)
 
-        logger.info("HV Source ramp to start voltage: from %E V to %E V with step %E V", voltage, voltage_start, voltage_step_before)
-        for voltage in LinearRange(voltage, voltage_start, voltage_step_before):
-            self.process.set_message("Ramp to start... {}".format(format_metric(voltage, "V")))
+        logger.info("HV Source ramp to bias voltage: from %E V to %E V with step %E V", voltage, bias_voltage, voltage_step_before)
+        for voltage in LinearRange(voltage, bias_voltage, voltage_step_before):
+            self.process.set_message("Ramp to bias... {}".format(format_metric(voltage, "V")))
             self.hvsrc_set_voltage_level(hvsrc, voltage)
             self.process.update_state({"hvsrc_voltage": voltage})
             time.sleep(waiting_time_before)
 
             # Compliance tripped?
             self.hvsrc_check_compliance(hvsrc)
+
+            if self.process.stop_requested:
+                break
+
+        # Ramp V Source to start voltage
+        voltage = self.vsrc_get_voltage_level(vsrc)
+
+        logger.info("V Source ramp to start voltage: from %E V to %E V with step %E V", voltage, voltage_start, voltage_step_before)
+        for voltage in LinearRange(voltage, voltage_start, voltage_step_before):
+            self.process.set_message("Ramp to start... {}".format(format_metric(voltage, "V")))
+            self.vsrc_set_voltage_level(vsrc, voltage)
+            self.process.update_state({"vsrc_voltage": voltage})
+            time.sleep(waiting_time_before)
+
+            # Compliance tripped?
+            self.vsrc_check_compliance(vsrc)
 
             if self.process.stop_requested:
                 break
@@ -291,7 +292,7 @@ class IVRampBiasElmMeasurement(MatrixMeasurement, HVSourceMixin, VSourceMixin, E
         elm.resource.query("*OPC?")
         self.elm_check_error(elm)
 
-        voltage = self.hvsrc_get_voltage_level(hvsrc)
+        voltage = self.vsrc_get_voltage_level(vsrc)
 
         ramp = LinearRange(voltage, voltage_stop, voltage_step)
         est = Estimate(len(ramp))
@@ -305,38 +306,38 @@ class IVRampBiasElmMeasurement(MatrixMeasurement, HVSourceMixin, VSourceMixin, E
         benchmark_vsrc = Benchmark("Read_V_Source")
         benchmark_environ = Benchmark("Read_Environment")
 
-        logger.info("HV Source ramp to end voltage: from %E V to %E V with step %E V", voltage, ramp.end, ramp.step)
+        logger.info("V Source ramp to end voltage: from %E V to %E V with step %E V", voltage, ramp.end, ramp.step)
         for voltage in ramp:
             with benchmark_step:
-                self.hvsrc_set_voltage_level(hvsrc, voltage)
-                self.process.update_state({"hvsrc_voltage": voltage})
+                self.vsrc_set_voltage_level(vsrc, voltage)
+                self.process.update_state({"vsrc_voltage": voltage})
                 # Move bias TODO
                 if bias_mode == "offset":
                     bias_voltage += abs(ramp.step) if ramp.begin <= ramp.end else -abs(ramp.step)
-                    self.vsrc_set_voltage_level(vsrc, bias_voltage)
-                    self.process.update_state({"vsrc_voltage": bias_voltage})
+                    self.hvsrc_set_voltage_level(hvsrc, bias_voltage)
+                    self.process.update_state({"hvsrc_voltage": bias_voltage})
 
                 time.sleep(waiting_time)
 
                 dt = time.time() - t0
 
                 est.advance()
-                self.process.set_message("{} | HV Source {} | Bias {}".format(format_estimate(est), format_metric(voltage, "V"), format_metric(bias_voltage, "V")))
+                self.process.set_message("{} | V Source {} | Bias {}".format(format_estimate(est), format_metric(voltage, "V"), format_metric(bias_voltage, "V")))
                 self.process.set_progress(*est.progress)
 
                 self.environment_update()
 
-                # read V Source
-                with benchmark_vsrc:
-                    vsrc_reading = self.vsrc_read_current(vsrc)
-
-                self.process.update_state({"vsrc_current": vsrc_reading})
-
                 # read HV Source
-                with benchmark_hvsrc:
+                with benchmark_vsrc:
                     hvsrc_reading = self.hvsrc_read_current(hvsrc)
 
                 self.process.update_state({"hvsrc_current": hvsrc_reading})
+
+                # read V Source
+                with benchmark_hvsrc:
+                    vsrc_reading = self.vsrc_read_current(vsrc)
+
+                self.process.update_state({"vsrc_current": vsrc_reading})
 
                 # read ELM
                 with benchmark_elm:
@@ -419,22 +420,22 @@ class IVRampBiasElmMeasurement(MatrixMeasurement, HVSourceMixin, VSourceMixin, E
 
             voltage_step = self.get_parameter("voltage_step")
 
-            voltage = self.hvsrc_get_voltage_level(hvsrc)
+            voltage = self.vsrc_get_voltage_level(vsrc)
 
-            logger.info("HV Source ramp to zero: from %E V to %E V with step %E V", voltage, 0, voltage_step_after)
+            logger.info("V Source ramp to zero: from %E V to %E V with step %E V", voltage, 0, voltage_step_after)
             for voltage in LinearRange(voltage, 0, voltage_step_after):
                 self.process.set_message("Ramp to zero... {}".format(format_metric(voltage, "V")))
-                self.hvsrc_set_voltage_level(hvsrc, voltage)
-                self.process.update_state({"hvsrc_voltage": voltage})
-                time.sleep(waiting_time_after)
-
-            bias_voltage = self.vsrc_get_voltage_level(vsrc)
-
-            logger.info("V Source ramp bias to zero: from %E V to %E V with step %E V", bias_voltage, 0, voltage_step_after)
-            for voltage in LinearRange(bias_voltage, 0, voltage_step_after):
-                self.process.set_message("Ramp bias to zero... {}".format(format_metric(voltage, "V")))
                 self.vsrc_set_voltage_level(vsrc, voltage)
                 self.process.update_state({"vsrc_voltage": voltage})
+                time.sleep(waiting_time_after)
+
+            bias_voltage = self.hvsrc_get_voltage_level(hvsrc)
+
+            logger.info("HV Source ramp bias to zero: from %E V to %E V with step %E V", bias_voltage, 0, voltage_step_after)
+            for voltage in LinearRange(bias_voltage, 0, voltage_step_after):
+                self.process.set_message("Ramp bias to zero... {}".format(format_metric(voltage, "V")))
+                self.hvsrc_set_voltage_level(hvsrc, voltage)
+                self.process.update_state({"hvsrc_voltage": voltage})
                 time.sleep(waiting_time_after)
 
             # Waiting time after ramp down.

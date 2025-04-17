@@ -2,6 +2,7 @@
 import usb
 import serial
 import gpib_ctypes
+from gpib_ctypes import gpib
 
 from pqc.__main__ import main
 
