@@ -2,6 +2,8 @@
 
 Process Quality Control for CMS tracker
 
+This is a modified version to test the PQC stuructes for HGCAL at Florida State University
+
 ## Overview
 
 This application provides PQC sensor measurements.
@@ -11,13 +13,13 @@ This application provides PQC sensor measurements.
 |Instrument                            |Role |
 |:-------------------------------------|:----|
 |Keithley 707B Switching Matrix        |Matrix |
-|Keysight E4980A LCR Meter             |LCR Meter |
+|Keysight E4980A LCR Meter (E4980AL Single channel@FSU)            |LCR Meter |
 |Keithley 6517B Electrometer           |ELM |
 |Keithley 2410 Source Meter            |HV Source, V Source |
 |Keithley 2470 Source Meter (optional) |HV Source, V Source |
-|Keithley 2657A Source Meter           |V Source, HV Source |
-|Corvus TT positioning controller      |Table |
-|HEPHY Environment Box                 |Environment |
+|Keithley 2657A Source Meter (Not used at FSU)          |V Source, HV Source |
+|Corvus TT positioning controller (Not used at FSU)     |Table |
+|HEPHY Environment Box (Optional)                |Environment |
 
 ### Setup schematic
 
