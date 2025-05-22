@@ -1,0 +1,648 @@
+id: testing_hgc
+name: PQC for HGC
+description: Used for testing purpose!
+contacts:
+  - name: PQC Flute 1
+    contact_id: flute_1
+    measurements:
+      - name: FET
+        type: iv_ramp_bias_elm
+        parameters:
+            matrix_channels: ['1A09', '2D02', '2H01']
+            waiting_time_start: 1 s
+            voltage_start: -2 V
+            voltage_stop: 10 V
+            voltage_step: 0.1 V
+            voltage_step_before: 2 V
+            voltage_step_after: 2 V
+            waiting_time: 300 ms
+            bias_voltage: 100 mV
+            hvsrc_current_compliance: 10 uA
+            vsrc_current_compliance: 10 uA
+            elm_filter_enable: true
+            elm_filter_count: 3
+            elm_current_autorange_enable: false
+            elm_current_range: 20 uA
+            analysis_functions:
+              - type: fet
+                limits:
+                  v_th: {minimum: -1, maximum: 6}
+      - name: FET fast
+        type: iv_ramp_bias_elm_multi_step
+        parameters:
+            matrix_channels: ['1A09', '2D02', '2H01']
+            waiting_time_start: 1 s
+            voltage_start: -2 V
+            v1_stop: -0.5 V
+            v2_stop: 6.0 V
+            voltage_stop: 10 V
+            coarse_voltage_step: 0.25 V
+            fine_voltage_step: 0.1 V
+            voltage_step_before: 2 V
+            voltage_step_after: 2 V
+            waiting_time: 300 ms
+            bias_voltage: 100 mV
+            hvsrc_current_compliance: 10 uA
+            vsrc_current_compliance: 10 uA
+            elm_filter_enable: true
+            elm_filter_count: 3
+            elm_current_autorange_enable: false
+            elm_current_range: 20 uA
+            analysis_functions:
+              - type: fet
+                limits:
+                  v_th: {minimum: -1, maximum: 6}
+      - name: MOS capacitor (HV Source)
+        type: cv_ramp
+        description: Variant using HVSource and LCR
+        parameters:
+            matrix_channels: ['1A11', '1B12', '2G11']
+            bias_voltage_start: -3 V
+            bias_voltage_stop: 8 V
+            bias_voltage_step: 0.1 V
+            bias_voltage_step_before: 2 V
+            bias_voltage_step_after: 2 V
+            waiting_time_start: 1 s
+            waiting_time: 100 ms
+            hvsrc_current_compliance: 100 uA
+            hvsrc_route_termination: rear
+            lcr_frequency: 10 kHz
+            lcr_amplitude: 250 mV
+            lcr_integration_time: long
+            lcr_averaging_rate: 2
+            lcr_auto_level_control: false
+            lcr_open_correction_mode: single
+            lcr_open_correction_channel: 1
+            analysis_functions:
+              - type: mos
+                parameters:
+                  min_r_value: 0.4
+                limits:
+                  v_fb2: {minimum: 1, maximum: 7}
+                  t_ox: {minimum: 0.2, maximum: 1.5}
+      - name: Capacitor test structure Right 10kHz 250mV (HV Source)
+        type: cv_ramp
+        description: Variant using HVSource and LCR
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1A11', '1B02', '2G09']
+            bias_voltage_start: -2 V
+            bias_voltage_stop: 2 V
+            bias_voltage_step: 0.5 V
+            waiting_time: 100 ms
+            hvsrc_current_compliance: 100 uA
+            hvsrc_sense_mode: local
+            hvsrc_route_termination: rear
+            lcr_frequency: 10 kHz
+            lcr_amplitude: 250 mV
+            lcr_integration_time: long
+            lcr_averaging_rate: 2
+            lcr_auto_level_control: false
+            lcr_open_correction_mode: multi
+            lcr_open_correction_channel: 2
+            analysis_functions:
+              - type: capacitor
+                limits:
+                  c_mean: {minimum: 1.0e-12, maximum: 4e-12}
+      - name: Capacitor test structure Left 10kHz 250mV (HV Source)
+        type: cv_ramp
+        description: Variant using HVSource and LCR
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1A11', '1B02', '2G10']
+            bias_voltage_start: -2 V
+            bias_voltage_stop: 2 V
+            bias_voltage_step: 0.5 V
+            waiting_time: 100 ms
+            hvsrc_current_compliance: 100 uA
+            hvsrc_sense_mode: local
+            hvsrc_route_termination: rear
+            lcr_frequency: 10 kHz
+            lcr_amplitude: 250 mV
+            lcr_integration_time: long
+            lcr_averaging_rate: 2
+            lcr_auto_level_control: false
+            lcr_open_correction_mode: multi
+            lcr_open_correction_channel: 3
+            analysis_functions:
+              - type: capacitor
+                limits:
+                  c_mean: {minimum: 1.0e-12, maximum: 4e-12}
+      - name: N+ Van-der-Pauw cross
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H05', '1C06', '2F06', '2E05']
+            current_start: -1 mA
+            current_stop: 1 mA
+            current_step: 200 uA
+            waiting_time: 100 ms
+            waiting_time_start: 1 s
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 25, maximum: 60}
+                  r_value: {minimum: 0.8, maximum: 1.1}
+      - name: Reverse N+ Van-der-Pauw cross
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H06', '1F05', '2E06', '2C05']
+            current_start: -1 mA
+            current_stop: 1 mA
+            current_step: 200 uA
+            waiting_time: 100 ms
+            waiting_time_start: 1 s
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 25, maximum: 60}
+                  r_value: {minimum: 0.8, maximum: 1.1}
+      - name: P-stop Van-der-Pauw blow
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1F07', '1E08', '2H04', '2C03']
+            current_start: -1 uA
+            current_stop: 1 uA
+            current_step: 500 nA
+            waiting_time: 100 ms
+            waiting_time_start: 5 s
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [van_der_pauw]
+      - name: P-stop Van-der-Pauw cross
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H07', '1C08', '2F04', '2E03']
+            current_start: -1 uA
+            current_stop: 1 uA
+            current_step: 200 nA
+            waiting_time: 100 ms
+            waiting_time_start: 1 s
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 15000, maximum: 35000}
+                  r_value: {minimum: 0.8, maximum: 1.1}
+      - name: Reverse P-stop Van-der-Pauw cross
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H08', '1F07', '2E04', '2C03']
+            current_start: -1 uA
+            current_stop: 1 uA
+            current_step: 200 nA
+            waiting_time: 100 ms
+            waiting_time_start: 1 s
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 15000, maximum: 35000}
+                  r_value: {minimum: 0.8, maximum: 1.1}
+  - name: PQC Flute 2
+    contact_id: flute_2
+    measurements:
+      - name: GCD
+        type: iv_ramp_bias_elm
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H05', '1D06', '1A12', '2C07']
+            voltage_start: -14 V
+            voltage_stop: 4 V
+            voltage_step: 0.25 V
+            voltage_step_before: 2 V
+            voltage_step_after: 2 V
+            waiting_time: 400 ms
+            bias_voltage: -5 V
+            hvsrc_current_compliance: 200 uA
+            vsrc_current_compliance: 10 uA
+            elm_integration_rate: 60
+            elm_current_range: 2 nA
+            elm_filter_enable: true
+            elm_filter_count: 5
+            elm_filter_type: repeat
+            analysis_functions:
+              - type: gcd
+                parameters:
+                  maxreldev: 0.2
+      - name: GCD fast
+        type: iv_ramp_bias_elm_multi_step
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H05', '1D06', '1A12', '2C07']
+            voltage_start: -14 V
+            v1_stop: -9.5 V
+            v2_stop: 1.0 V
+            voltage_stop: 4 V
+            coarse_voltage_step: 0.75 V
+            fine_voltage_step: 0.25 V
+            voltage_step_before: 2 V
+            voltage_step_after: 2 V
+            waiting_time: 300 ms
+            bias_voltage: -5 V
+            hvsrc_current_compliance: 100 uA
+            vsrc_current_compliance: 10 uA
+            elm_integration_rate: 60
+            elm_current_range: 2 nA
+            elm_filter_enable: true
+            elm_filter_count: 5
+            elm_filter_type: repeat
+            analysis_functions:
+              - type: gcd
+                parameters:
+                  maxreldev: 0.2
+      - name: N+ lwblow structure
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1F01', '1H02', '1E03', '2C08']
+            current_start: -1 mA
+            current_stop: 1 mA
+            current_step: 500 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [van_der_pauw]
+      - name: N+ linewidth structure
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H01', '1F02', '1C03', '2E08']
+            current_start: -1 mA
+            current_stop: 1 mA
+            current_step: 250 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  a: {minimum: 100, maximum: 200}
+      - name: P-stop lwblow structure (4-wire)
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['2F07', '1H04', '2C06', '2E05']
+            current_start: -1000 nA
+            current_stop: 1000 nA
+            current_step: 500 nA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [van_der_pauw]
+      - name: P-stop linewidth structure (4-wire)
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['2H07', '1F04', '2E06', '2C05']
+            current_start: -1000 nA
+            current_stop: 1000 nA
+            current_step: 250 nA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  a: {minimum: 30000, maximum: 60000}
+      - name: P-stop linewidth structure (2-wire)
+        type: iv_ramp_4_wire
+        enabled: false
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H04', '2C06']
+            current_start: -1000 nA
+            current_stop: 1000 nA
+            current_step: 250 nA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: local
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  a: {minimum: 60000, maximum: 90000}
+      - name: Dielectric Breakdown 1
+        type: iv_ramp_elm
+        parameters:
+            matrix_channels: ['2H01', '1D09']
+            voltage_start: 0 V
+            waiting_time_start: 1 s
+            voltage_stop: 200 V
+            voltage_step: 5 V
+            waiting_time_before: 2 s
+            waiting_time: 2 s
+            hvsrc_current_compliance: 100 nA
+            hvsrc_sense_mode: local
+            hvsrc_accept_compliance: true
+            elm_zero_correction: false
+            elm_integration_rate: 60
+            elm_filter_enable: true
+            elm_filter_count: 3
+            elm_filter_type: repeat
+            elm_current_autorange_enable: false
+            elm_current_range: 200 nA
+  - name: PQC Flute 3
+    contact_id: flute_3
+    measurements:
+      - name: Diode IV
+        type: iv_ramp_elm
+        enabled: true
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1A12', '2D07', '1C04']
+            voltage_start: 0 V
+            voltage_stop: -1000 V
+            voltage_step: 20 V
+            waiting_time: 0.25 s
+            hvsrc_current_compliance: 200 uA
+            hvsrc_sense_mode: local
+            hvsrc_route_termination: rear
+            hvsrc_filter_enabled: true
+            hvsrc_filter_count: 10
+            hvsrc_filter_type: repeat
+            elm_filter_enable: true
+            elm_filter_count: 5
+            elm_filter_type: repeat
+            elm_zero_correction: true
+            elm_integration_rate: 60
+            elm_current_autorange_enable: false
+            elm_current_range: 200 uA
+            hvsrc_accept_compliance: true
+            analysis_functions: [iv]
+      - name: Diode CV
+        type: cv_ramp
+        enabled: true
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1A11', '1B12', '2G07', '1C04']
+            bias_voltage_start: 0 V
+            bias_voltage_stop: -500 V
+            bias_voltage_step: 5 V
+            waiting_time: 300 ms
+            hvsrc_current_compliance: 200 uA
+            hvsrc_sense_mode: local
+            hvsrc_route_termination: rear
+            lcr_frequency: 10 kHz
+            lcr_amplitude: 250 mV
+            lcr_integration_time: long
+            lcr_averaging_rate: 2
+            lcr_auto_level_control: false
+            lcr_open_correction_mode: multi
+            lcr_open_correction_channel: 4
+            hvsrc_accept_compliance: true
+            analysis_functions: [cv]
+      - name: Metal meander
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1F01', '2E11', '2H10', '2C01']
+            current_start: -1 mA
+            current_stop: 1 mA
+            current_step: 250 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [van_der_pauw]
+      - name: Metal clover leaf blow
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1F05', '1E06', '2H06', '2C05']
+            current_start: -30 mA
+            current_stop: 30 mA
+            current_step: 10 mA
+            waiting_time: 200 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [van_der_pauw]
+      - name: Metal clover leaf Van-der-Pauw
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H05', '1C06', '2F06', '2E05']
+            current_start: -200 mA
+            current_stop: 200 mA
+            current_step: 10 mA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 0.015, maximum: 0.040}
+                  r_value: {minimum: 0.6, maximum: 1.1}
+      - name: Reverse Metal clover leaf Van-der-Pauw
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H06', '1F05', '2E06', '2C05']
+            current_start: -200 mA
+            current_stop: 200 mA
+            current_step: 10 mA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 0.015, maximum: 0.040}
+                  r_value: {minimum: 0.6, maximum: 1.1}
+      - name: P+ cross-bridge Van-der-Pauw
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H07', '2F04', '2E03', '1C08']
+            current_start: -100 uA
+            current_stop: 100 uA
+            current_step: 25 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 900, maximum: 2000}
+                  r_value: {minimum: 0.8, maximum: 1.1}
+      - name: Reverse P+ cross-bridge Van-der-Pauw
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H08', '1F07', '2E04', '2C03']
+            current_start: -100 uA
+            current_stop: 100 uA
+            current_step: 25 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 900, maximum: 2000}
+                  r_value: {minimum: 0.8, maximum: 1.1}
+      - name: P+ cross-bridge linewidth
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['2H04', '1F08', '2E02', '1C09']
+            current_start: -100 uA
+            current_stop: 100 uA
+            current_step: 25 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [van_der_pauw]
+      - name: Bulk blow
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1F02', '2H09', '2C08', '1E03']
+            current_start: 0 nA
+            current_stop: 500 nA
+            current_step: 100 nA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [van_der_pauw]
+      - name: Bulk cross
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H02', '2F09', '2E08', '1C03']
+            current_start: 0 nA
+            current_stop: 500 nA
+            current_step: 25 nA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 30000, maximum: 80000}
+                  r_value: {minimum: 0.5, maximum: 1.1}
+      - name: Reverse bulk cross
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H03', '1F02', '2E09', '2C08']
+            current_start: 0 nA
+            current_stop: 500 nA
+            current_step: 25 nA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions:
+              - type: van_der_pauw
+                limits:
+                  r_sheet: {minimum: 30000, maximum: 80000}
+                  r_value: {minimum: 0.5, maximum: 1.1}
+  - name: PQC Flute 4
+    contact_id: flute_4
+    enabled: true
+    measurements:
+      - name: GCD05
+        type: iv_ramp_bias_elm
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1A12', '1D06', '1H05', '2C06']
+            voltage_start: -14 V
+            voltage_stop: 4 V
+            voltage_step: 0.25 V
+            voltage_step_before: 2 V
+            voltage_step_after: 2 V
+            waiting_time: 300 ms
+            bias_voltage: -5 V
+            hvsrc_current_compliance: 100 uA
+            vsrc_current_compliance: 10 uA
+            elm_integration_rate: 60
+            elm_current_range: 2 nA
+            elm_filter_enable: true
+            elm_filter_count: 5
+            elm_filter_type: repeat
+            analysis_functions:
+              - type: gcd
+                parameters:
+                  maxreldev: 0.2
+      - name: GCD05 fast
+        type: iv_ramp_bias_elm_multi_step
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1A12', '1D06', '1H05', '2C06']
+            voltage_start: -14 V
+            v1_stop: -9.5 V
+            v2_stop: 1.0 V
+            voltage_stop: 4 V
+            coarse_voltage_step: 0.75 V
+            fine_voltage_step: 0.25 V
+            voltage_step_before: 2 V
+            voltage_step_after: 2 V
+            waiting_time: 300 ms
+            bias_voltage: -5 V
+            hvsrc_current_compliance: 100 uA
+            vsrc_current_compliance: 10 uA
+            elm_integration_rate: 60
+            elm_current_range: 2 nA
+            elm_filter_enable: true
+            elm_filter_count: 5
+            elm_filter_type: repeat
+            analysis_functions:
+              - type: gcd
+                parameters:
+                  maxreldev: 0.2
+      - name: N+ CBKRblow
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1F03', '1H02', '2C08', '2E07']
+            current_start: -100 uA
+            current_stop: 100 uA
+            current_step: 50 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [cbkr]
+      - name: N+ CBKR
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H03', '1F02', '2E08', '2C07']
+            current_start: -100 uA
+            current_stop: 100 uA
+            current_step: 10 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [cbkr]
+      - name: P+ contact chain
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H02', '1F01', '2E01', '2C02']
+            current_start: -10 uA
+            current_stop: 10 uA
+            current_step: 1 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [cbkr]
+      - name: N+ contact chain
+        type: iv_ramp_4_wire
+        parameters:
+            matrix_enable: true
+            matrix_channels: ['1H02', '1F01', '2E11', '1C09']
+            current_start: -10 uA
+            current_stop: 10 uA
+            current_step: 1 uA
+            waiting_time: 100 ms
+            vsrc_voltage_compliance: 20 V
+            vsrc_sense_mode: remote
+            analysis_functions: [cbkr]
