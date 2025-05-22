@@ -11,6 +11,7 @@ from .panels import (
     IVRamp4WirePanel,
     IVRamp4WireBiasPanel,
     IVRampBiasElmPanel,
+    IVRampBiasElmMultiStepPanel,
     IVRampBiasPanel,
     IVRampElmPanel,
     IVRampPanel,
@@ -82,6 +83,7 @@ class PanelStack(QtWidgets.QWidget):
         self.addPanel("iv_ramp_elm", IVRampElmPanel())
         self.addPanel("iv_ramp_bias", IVRampBiasPanel())
         self.addPanel("iv_ramp_bias_elm", IVRampBiasElmPanel())
+        self.addPanel("iv_ramp_bias_elm_multi_step", IVRampBiasElmMultiStepPanel())
         self.addPanel("cv_ramp", CVRampPanel())
         self.addPanel("cv_ramp_vsrc", CVRampHVPanel())
         self.addPanel("cv_ramp_alt", CVRampAltPanel())
