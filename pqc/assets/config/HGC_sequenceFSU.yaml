@@ -7,6 +7,7 @@ contacts:
     measurements:
       - name: FET
         type: iv_ramp_bias_elm
+        enabled: false
         parameters:
             matrix_channels: ['1A09', '2D02', '2H01']
             waiting_time_start: 1 s
@@ -214,6 +215,7 @@ contacts:
     measurements:
       - name: GCD
         type: iv_ramp_bias_elm
+        enabled : false
         parameters:
             matrix_enable: true
             matrix_channels: ['1H05', '1D06', '1A12', '2C07']
@@ -356,7 +358,7 @@ contacts:
     measurements:
       - name: Diode IV
         type: iv_ramp_elm
-        enabled: true
+        enabled: false
         parameters:
             matrix_enable: true
             matrix_channels: ['1A12', '2D07', '1C04']
@@ -381,7 +383,7 @@ contacts:
             analysis_functions: [iv]
       - name: Diode CV
         type: cv_ramp
-        enabled: true
+        enabled: false
         parameters:
             matrix_enable: true
             matrix_channels: ['1A11', '1B12', '2G07', '1C04']
@@ -551,6 +553,7 @@ contacts:
     measurements:
       - name: GCD05
         type: iv_ramp_bias_elm
+        enabled: false
         parameters:
             matrix_enable: true
             matrix_channels: ['1A12', '1D06', '1H05', '2C06']
